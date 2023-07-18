@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from pyaxis import pyaxis
 import src.library as bb
+import os
 
 class INE_Experimental:
     def __init__(self, df, code):
@@ -30,11 +31,20 @@ class INE_Experimental:
             df_norm = pd.pivot(df[df['Sexo'] == 'Total'], values='DATA', index=['cod', 'nom', 'Periodo'], columns=['Distribución de la renta por unidad de consumo']).reset_index()
         elif code == bb.ine_experimental['Indicadores demográficos']:
             df_norm = pd.pivot(df, values='DATA', index=['cod', 'nom', 'Periodo'], columns=['Indicadores demográficos']).reset_index()
-        elif code == bb.ine_experimental['Índice de Gini y Distribución de la renta P80/P20']:
+        elif code == bb.ine_experimental['Índice de Gini y Distribución de la renta P80_P20']:
             df_norm = pd.pivot(df, values='DATA', index=['cod', 'nom', 'Periodo'], columns=['Indicadores de renta media']).reset_index()
         else:
             pass
         df_norm.loc[df_norm['cod'] == 'Guijarrosa,', 'nom'] = 'Guijarrosa, La distrito 01'
         df_norm.loc[df_norm['cod'] == 'Guijarrosa,', 'cod'] = '1490201'
-        return df_norm     
-        
+        for column in df_norm.columns.tolist():
+            if column == 'cod' or column == 'nom':
+                pass
+            else:
+                df_norm[column] = pd.to_numeric(df_norm[column])
+        return df_norm
+
+    def export(df, code):
+        folder = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'output', 'xlsx'))
+        name = code.replace('/', '_') .replace(' ', '_') + '.xlsx'
+        df[df['Periodo'] == max(df['Periodo'])].to_excel(os.path.join(folder, name), index=False, engine = 'openpyxl')
