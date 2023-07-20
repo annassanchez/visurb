@@ -10,3 +10,12 @@ ine_experimental = {
     'Índice de Gini y Distribución de la renta P80_P20':'37677',
     'Indicadores demográficos':'30832'
     }
+
+ine_padron = {
+    'Población por sexo, Sección y edad':'0001',
+    'Población por sexo, Sección y nacionalidad (continentes)':'0002',
+    'Población por sexo, Sección y nacionalidad (principales nacionalidades)':'0003',
+    'Población por sexo, Sección y nacionalidad (Unión Europea, Noruega y Reino Unido)':'0004',
+    'Población por sexo, Sección y relación lugar de nacimiento y residencia':'0005',
+    'Población por sexo, Sección y país de nacimiento':'0006',
+}
