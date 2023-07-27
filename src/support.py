@@ -83,8 +83,9 @@ class INE_Experimental:
             pass
         df_norm.loc[df_norm['cod'] == 'Guijarrosa,', 'nom'] = 'Guijarrosa, La distrito 01'
         df_norm.loc[df_norm['cod'] == 'Guijarrosa,', 'cod'] = '1490201'
+        df_norm['nivel'] = np.where((df_norm['cod'].str.len() == 5), 'municipio', np.where((df_norm['cod'].str.len() == 7), 'distrito', np.where((df_norm['cod'].str.len() == 10), 'sección censal', 'check')))
         for column in df_norm.columns.tolist():
-            if column == 'cod' or column == 'nom':
+            if column == 'cod' or column == 'nom' or column == 'nivel':
                 pass
             else:
                 df_norm[column] = pd.to_numeric(df_norm[column])
@@ -114,7 +115,7 @@ class INE_Experimental:
         """
         folder = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'output', 'xlsx'))
         name = code.replace('/', '_') .replace(' ', '_') + '.xlsx'
-        df[df['Periodo'] == max(df['Periodo'])].to_excel(os.path.join(folder, name), index=False, engine = 'openpyxl')
+        df[(df['Periodo'] == max(df['Periodo'])) & (df['nivel'] == 'sección censal')].to_excel(os.path.join(folder, name), index=False, engine = 'openpyxl')
 
 class Padron:
     """
